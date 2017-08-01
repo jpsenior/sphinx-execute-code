@@ -45,3 +45,7 @@ This is a test
    :hide_headers:
 
    print 'execute_code_hide_header:' + 'sample_8'
+
+.. execute_code::
+   :filename: tests/hidden_filename.py
+   :hide_filename:

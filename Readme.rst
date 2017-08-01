@@ -9,6 +9,7 @@ This was written as an alternative to other code execution functions which
 relied on doctest formats, and attempts to be more flexible, similar to
 literal-block and code-block statements.
 
+.. warning:: This module allows you to run arbitrary code, and should be treated with caution.
 
 Options
 -------
@@ -21,14 +22,16 @@ output_language
 hide_code
     If specified, will hide the code block and only show results
 hide_headers
-    If specified, hides the 'Code' and 'Results' caption headers around the literal blocks
+    If specified, hides the 'Code' and 'Results' caption headers around
+    the literal blocks
 filename
-    If specified, will load code from a file (relative to sphinx doc root) and ignore content.
+    If specified, will load code from a file (relative to sphinx doc root)
+    and ignore content.
 
 execute_code
 ------------
-Running 'execute_code' as a directive allows the administrator to embed exact python code as if it was
-pasted in a normal code-block.
+Running 'execute_code' as a directive allows the administrator to embed exact
+python code as if it was pasted in a normal code-block.
 
 Executing python code and showing the result output::
 
@@ -48,7 +51,9 @@ Executing python code and showing the result output::
 
 Output language
 ---------------
-Customizing the output syntax can be helpful to make it easy to document any other pygments lexxer - eg ini, javascript
+Customizing the output syntax can be helpful to make it easy to document
+any other pygments lexxer - eg ini, javascript
+
 We can customize the output language parser (for JSON/Javascript)::
 
     .. execute_code::
@@ -58,7 +63,8 @@ We can customize the output language parser (for JSON/Javascript)::
 
 Hiding code
 -----------
-You may want to hide the example code that is executing (avoiding highlighting/etc) and display the results only:
+You may want to hide the example code that is executing
+(avoiding highlighting/etc) and display the results only.
 
 We can also hide the code input, showing only the executed code results::
 
@@ -69,35 +75,48 @@ We can also hide the code input, showing only the executed code results::
 
 Suppressing output headers
 --------------------------
-Suppressing the 'Headers' output for "Code (With filename)" and Results header::
+Suppressing the 'Headers' outputs for Code and Results header::
 
     .. execute_code::
-        :hide_headers:
+       :hide_headers:
 
-        foo = 32
-        print 'This will hide the Code and Results text - and foo is %d' % foo
+       foo = 32
+       print 'This will hide the Code and Results text - and foo is %d' % foo
 
 Executing python code from a file
 ---------------------------------
-sphinx-execute-code also allows you to import a python file and execute it within a document.
+execute_code also allows you to import a python file and execute
+it within a document.
 
-Running a Python file from filename, including code results from the .py example::
+Running a Python file from filename from the .py example::
 
     .. execute_code::
-    :filename: tests/example_class.py
+       :filename: tests/example_class.py
+
+This function also supports the argument 'hide_filename'::
+
+    .. execute_code::
+       :filename: tests/example_class.py
+       :hide_filename:
 
 Installation
 ============
-
-Installing sphinx-execute-code requires you to modify your sphinx conf.py
 
 Installation from source::
 
     $ git clone git@github.com:jpsenior/sphinx-execute-code.git
     $ python setup.py install
 
+Installation from pypi::
 
-Installation:: none
+    $ pip install sphinx-execute-code
+
+Activating on Sphinx
+====================
+
+To activate the extension, add it to your extensions variable in conf.py
+for your project.
+
+Activating the extension in sphinx::
 
     extensions.append('sphinx_execute_code')
-

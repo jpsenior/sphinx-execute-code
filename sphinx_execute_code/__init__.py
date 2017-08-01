@@ -1,8 +1,13 @@
-from docutils.parsers.rst import Directive, directives
-from docutils import nodes
+#!/usr/bin/env/python
+"""
+sphinx-execute-code module for execute_code directive
+To use this module, add: extensions.append('sphinx_execute_code')
+"""
 import sys
 import StringIO
 import os
+from docutils.parsers.rst import Directive, directives
+from docutils import nodes
 
 # execute_code function thanks to Stackoverflow code post from hekevintran
 # https://stackoverflow.com/questions/701802/how-do-i-execute-a-string-containing-python-code-in-python
@@ -13,6 +18,8 @@ __version__ = '0.2a2'
 
 
 class ExecuteCode(Directive):
+    """ Sphinx class for execute_code directive
+    """
     has_content = True
     required_arguments = 0
     optional_arguments = 5
@@ -23,6 +30,7 @@ class ExecuteCode(Directive):
         'hide_code': directives.flag,
         'hide_headers': directives.flag,
         'filename': directives.path,
+        'hide_filename': directives.flag,
     }
 
     @classmethod
@@ -50,6 +58,7 @@ class ExecuteCode(Directive):
         sys.stderr = err
 
         try:
+            # pylint: disable=exec-used
             exec code
         # If the code is invalid, just skip the block - any actual code errors
         # will be raised properly
@@ -71,10 +80,7 @@ class ExecuteCode(Directive):
         :return:
         """
         language = self.options.get('language') or 'python'
-        linenos = 'linenos' in self.options
         output_language = self.options.get('output_language') or 'none'
-        hide_code = 'hide_code' in self.options
-        hide_headers = 'hide_headers' in self.options
         filename = self.options.get('filename')
         code = ''
 
@@ -82,38 +88,43 @@ class ExecuteCode(Directive):
             code = '\n'.join(self.content)
         if filename:
             try:
-                with open(filename, 'r') as f:
-                    code = f.read()
+                with open(filename, 'r') as code_file:
+                    code = code_file.read()
                     self.warning('code is %s' % code)
-            except (IOError, OSError) as e:
+            except (IOError, OSError) as err:
                 # Raise warning instead of a code block
-                error = 'Error opening file: %s, working folder: %s' % (e, os.getcwd())
+                error = 'Error opening file: %s, working folder: %s' % (err, os.getcwd())
                 self.warning(error)
                 return [nodes.warning(error, error)]
 
         output = []
 
         # Show the example code
-        if not hide_code:
+        if not 'hide_code' in self.options:
             input_code = nodes.literal_block(code, code)
 
             input_code['language'] = language
-            input_code['linenos'] = linenos
-            if not hide_headers:
-                output.append(nodes.caption(text='Code %s' % '' if filename is None else str(filename)))
+            input_code['linenos'] = 'linenos' in self.options
+            if not 'hide_headers' in self.options:
+                suffix = ''
+                if not 'hide_filename' in self.options:
+                    suffix = '' if filename is None else str(filename)
+                output.append(nodes.caption(
+                    text='Code %s' % suffix))
             output.append(input_code)
 
         # Show the code results
-        if not hide_headers:
+        if not 'hide_headers' in self.options:
             output.append(nodes.caption(text='Results'))
         code_results = self.execute_code(code)
         code_results = nodes.literal_block(code_results, code_results)
 
-        code_results['linenos'] = linenos
+        code_results['linenos'] = 'linenos' in self.options
         code_results['language'] = output_language
         output.append(code_results)
         return output
 
 def setup(app):
+    """ Register sphinx_execute_code directive with Sphinx """
     app.add_directive('execute_code', ExecuteCode)
     return {'version': __version__}
