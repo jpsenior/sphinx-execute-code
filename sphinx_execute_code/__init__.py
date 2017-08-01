@@ -2,6 +2,25 @@
 """
 sphinx-execute-code module for execute_code directive
 To use this module, add: extensions.append('sphinx_execute_code')
+
+Available options:
+
+        'linenos': directives.flag,
+        'output_language': directives.unchanged,
+        'hide_code': directives.flag,
+        'hide_headers': directives.flag,
+        'filename': directives.path,
+        'hide_filename': directives.flag,
+
+Usage:
+
+.. example_code:
+   :linenos:
+   :hide_code:
+
+   print 'Execute this python code'
+
+   See Readme.rst for documentation details
 """
 import sys
 import StringIO
