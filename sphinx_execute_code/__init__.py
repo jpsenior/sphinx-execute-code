@@ -9,10 +9,7 @@ import os
 
 __author__ = 'jp.senior@gmail.com'
 __docformat__ = 'restructuredtext'
-__version__ = '0.2a1'
-
-
-
+__version__ = '0.2a2'
 
 
 class ExecuteCode(Directive):
@@ -103,7 +100,7 @@ class ExecuteCode(Directive):
             input_code['language'] = language
             input_code['linenos'] = linenos
             if not hide_headers:
-                output.append(nodes.caption(text='Code %s' % filename or ''))
+                output.append(nodes.caption(text='Code %s' % '' if filename is None else str(filename)))
             output.append(input_code)
 
         # Show the code results
