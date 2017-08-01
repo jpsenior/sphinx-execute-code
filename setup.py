@@ -10,7 +10,7 @@ setup(
         author='JP Senior',
         author_email='jp.senior@gmail.com',
         description='Sphinx support for execution of python code in sphinx documentation from code blocks or files',
-        requires=['docutils'],
+        install_requires=['docutils', 'sphinx'],
         classifiers=[
             'Development Status :: 3 - Alpha',
             'Intended Audience :: Developers',
