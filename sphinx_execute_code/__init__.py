@@ -23,10 +23,14 @@ Usage:
    See Readme.rst for documentation details
 """
 import sys
-import StringIO
 import os
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 # execute_code function thanks to Stackoverflow code post from hekevintran
 # https://stackoverflow.com/questions/701802/how-do-i-execute-a-string-containing-python-code-in-python
@@ -66,19 +70,19 @@ class ExecuteCode(Directive):
             ExecutionError when supplied python is incorrect
 
         Examples:
-            >>> execute_code('print "foobar"')
+            >>> execute_code('print("foobar")')
             'foobar'
         """
 
-        output = StringIO.StringIO()
-        err = StringIO.StringIO()
+        output = StringIO()
+        err = StringIO()
 
         sys.stdout = output
         sys.stderr = err
 
         try:
             # pylint: disable=exec-used
-            exec code
+            exec(code)
         # If the code is invalid, just skip the block - any actual code errors
         # will be raised properly
         except TypeError:
@@ -142,6 +146,7 @@ class ExecuteCode(Directive):
         code_results['language'] = output_language
         output.append(code_results)
         return output
+
 
 def setup(app):
     """ Register sphinx_execute_code directive with Sphinx """

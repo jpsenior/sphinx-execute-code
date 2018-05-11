@@ -12,5 +12,6 @@ class Hello(object):
         """ returns Hello, world!"""
         return self.msg
 
+
 if __name__ == "__main__":
-    print Hello().out()
+    print(Hello().out())
