@@ -2,10 +2,13 @@
 """ Distutils setup file """
 from setuptools import setup
 
+
 def readme():
     """ Returns Readme.rst as loaded RST for documentation """
     with open('Readme.rst', 'r') as filename:
         return filename.read()
+
+
 setup(
     name='sphinx_execute_code',
     version='0.2a2',

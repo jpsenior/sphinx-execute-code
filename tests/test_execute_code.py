@@ -16,13 +16,11 @@ from sphinx_execute_code import ExecuteCode
 from tests.example_class import Hello
 
 
-
-
 def test_execute_code_function():
     """ Ensure simple code functions execute """
     code = dedent('''
-    print "foo"
-    print "bar"
+    print("foo")
+    print("bar")
     ''')
 
     expected_output = dedent('''\
@@ -33,22 +31,25 @@ def test_execute_code_function():
 
     assert expected_output == results
 
+
 def test_execute_and_import():
     """ Import a generic module, make sure we do not get any type errors """
     code = dedent('''
     import os
-    print os.path
+    print(os.path)
     ''')
     results = ExecuteCode.execute_code(code)
 
-    assert results != None
+    assert results is not None
     assert results != ''
+
 
 def test_execute_empty():
     """ execute_code function should be able to take empty content """
     code = ''
     results = ExecuteCode.execute_code(code)
     assert results == ''
+
 
 def test_execute_code_sample():
     """ Just makes sure the sample code output of this sample works as expected """
