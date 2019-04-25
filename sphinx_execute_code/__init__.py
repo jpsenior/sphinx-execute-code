@@ -23,10 +23,14 @@ Usage:
    See Readme.rst for documentation details
 """
 import sys
-import StringIO
 import os
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
+
+if sys.version_info.major == 2:
+    from StringIO import StringIO
+else:
+    from io import StringIO
 
 # execute_code function thanks to Stackoverflow code post from hekevintran
 # https://stackoverflow.com/questions/701802/how-do-i-execute-a-string-containing-python-code-in-python
@@ -78,7 +82,7 @@ class ExecuteCode(Directive):
 
         try:
             # pylint: disable=exec-used
-            exec code
+            exec(code)
         # If the code is invalid, just skip the block - any actual code errors
         # will be raised properly
         except TypeError:
