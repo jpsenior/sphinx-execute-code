@@ -27,6 +27,8 @@ hide_headers
 filename
     If specified, will load code from a file (relative to sphinx doc root)
     and ignore content.
+precode
+    code which will also run, but not show up in the code window (e.g. for imports)
 
 execute_code
 ------------
@@ -74,6 +76,17 @@ We can also hide the code input, showing only the executed code results::
         print 'This should not print the example code'
 
 Suppressing output headers
+--------------------------
+Suppressing the 'Headers' outputs for Code and Results header::
+
+    .. execute_code::
+       :hide_headers:
+       :precode: from MyPackage import MyClass
+
+       val = MyClass.test()
+       print(val)
+
+Hiding imports
 --------------------------
 Suppressing the 'Headers' outputs for Code and Results header::
 
