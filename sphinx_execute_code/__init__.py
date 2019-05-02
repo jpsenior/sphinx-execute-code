@@ -54,28 +54,25 @@ class ExecuteCode(Directive):
         'hide_headers': directives.flag,
         'filename': directives.path,
         'hide_filename': directives.flag,
+        'precode': directives.unchanged
     }
 
     @classmethod
     def execute_code(cls, code):
         """ Executes supplied code as pure python and returns a list of stdout, stderr
-
         Args:
             code (string): Python code to execute
-
         Results:
             (list): stdout, stderr of executed python code
-
         Raises:
             ExecutionError when supplied python is incorrect
-
         Examples:
             >>> execute_code('print "foobar"')
             'foobar'
         """
 
-        output = StringIO.StringIO()
-        err = StringIO.StringIO()
+        output = StringIO()
+        err = StringIO()
 
         sys.stdout = output
         sys.stderr = err
@@ -99,7 +96,6 @@ class ExecuteCode(Directive):
 
     def run(self):
         """ Executes python code for an RST document, taking input from content or from a filename
-
         :return:
         """
         language = self.options.get('language') or 'python'
@@ -139,13 +135,17 @@ class ExecuteCode(Directive):
         # Show the code results
         if not 'hide_headers' in self.options:
             output.append(nodes.caption(text='Results'))
-        code_results = self.execute_code(code)
+        # add precode
+        if 'precode' in self.options:
+            code = self.options['precode'] + '\n' + code
+        code_results = self.execute_code( code)
         code_results = nodes.literal_block(code_results, code_results)
 
         code_results['linenos'] = 'linenos' in self.options
         code_results['language'] = output_language
         output.append(code_results)
         return output
+
 
 def setup(app):
     """ Register sphinx_execute_code directive with Sphinx """
