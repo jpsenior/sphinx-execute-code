@@ -74,8 +74,15 @@ class ExecuteCode(Directive):
             'foobar'
         """
 
-        output = StringIO.StringIO()
-        err = StringIO.StringIO()
+        # Added by @stephanobryan for python 3
+        if sys.version_info.major == 2:
+            from StringIO import StringIO
+            output = StringIO.StringIO()
+            err = StringIO.StringIO()
+        else:
+            import io
+            output = io.StringIO()
+            err = io.StringIO()
 
         sys.stdout = output
         sys.stderr = err
