@@ -74,8 +74,8 @@ class ExecuteCode(Directive):
             'foobar'
         """
 
-        output = StringIO.StringIO()
-        err = StringIO.StringIO()
+        output = StringIO()
+        err = StringIO()
 
         sys.stdout = output
         sys.stderr = err
